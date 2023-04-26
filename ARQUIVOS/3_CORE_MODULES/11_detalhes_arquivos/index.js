@@ -6,6 +6,8 @@ fs.stat("arquivo.txt",(err,info)=>{
         return;
     } else {
         console.log(info);
+        console.log(info.isDirectory());
+        console.log(info.isFile());
         return;
     }
 });
