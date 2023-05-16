@@ -22,11 +22,13 @@ const operation = () => {
         const action = answer['action'];
         if(action === 'Criar Conta' ){
             createAccount();
-        } else if(action === 'Sair' ){
+
+        } else if(action === 'Depositar' ){
+            deposit();
+        }
+        else if(action === 'Sair' ){
             endToProgram();
         }
-        console.log(action);
-
     }).catch((err) => console.log(err));
 };
 
@@ -66,4 +68,28 @@ const buildAccount = () => {
             console.log(chalk.green("Parabéns, sua conta foi criada!"));
             operation();            
         }).catch((err) => console.log(err));
+};
+
+// add an amount to user account
+const deposit = () => {
+    inquirer.prompt([{
+        name:"accountName",
+        message:"Qual o nome da sua conta?"
+    }]).then((answer)=>{
+        const accountName = answer['accountName'];
+        if(!verifyAccount(`accounts/${accountName}.json`)){
+         return deposit();
+        } else {
+            
+        }
+    }).catch((err) => console.log(err));
+
+};
+
+const verifyAccount = (accountName) => {
+    if(!fs.existsSync(accountName)){
+        console.log(chalk.bgRed.black("Esta conta não existe. Escolha outra conta!"));
+        return false;
+    }
+    return true;
 }
