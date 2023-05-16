@@ -103,6 +103,10 @@ const verifyAccount = (accountName) => {
 
 const addAmount = (accountName,amount) => {
     const account = getAccount(accountName);
+    if(!amount){
+        console.log(chalk.bgRed.black("Erro ao informar o valor, tente mais tarde!"));
+        return deposit();
+    }
     console.log(account);
 }
 
