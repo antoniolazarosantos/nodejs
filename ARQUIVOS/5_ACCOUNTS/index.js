@@ -82,7 +82,7 @@ const deposit = () => {
         } 
         inquirer.prompt([{
             name:"amount",
-            message:"Quanto você deseja depoistar?"
+            message:"Quanto você deseja depositar?"
         }]).then((answer)=>{
             const amount = answer['amount'];
             addAmount(`accounts/${accountName}.json`,amount);
@@ -102,12 +102,16 @@ const verifyAccount = (accountName) => {
 }
 
 const addAmount = (accountName,amount) => {
-    const account = getAccount(accountName);
+    const accountData = getAccount(accountName);
     if(!amount){
         console.log(chalk.bgRed.black("Erro ao informar o valor, tente mais tarde!"));
         return deposit();
     }
-    console.log(account);
+    accountData.balance = parseFloat(accountData.balance) + parseFloat(amount);
+    fs.writeFileSync(accountName,JSON.stringify(accountData),(err) => {
+        console.log(err);
+    });
+    console.log(chalk.green(`Foi depositado R$ ${amount} na sua conta!`));
 }
 
 const getAccount = (accountName) => {
