@@ -79,9 +79,16 @@ const deposit = () => {
         const accountName = answer['accountName'];
         if(!verifyAccount(`accounts/${accountName}.json`)){
          return deposit();
-        } else {
-            
-        }
+        } 
+        inquirer.prompt([{
+            name:"amount",
+            message:"Quanto você deseja depoistar?"
+        }]).then((answer)=>{
+            const amount = answer['amount'];
+            addAmount(`accounts/${accountName}.json`,amount);
+            operation();
+        }).catch((err) => console.log(err));
+
     }).catch((err) => console.log(err));
 
 };
@@ -92,4 +99,17 @@ const verifyAccount = (accountName) => {
         return false;
     }
     return true;
+}
+
+const addAmount = (accountName,amount) => {
+    const account = getAccount(accountName);
+    console.log(account);
+}
+
+const getAccount = (accountName) => {
+    const accountJSON = fs.readFileSync(accountName,{
+        encoding:'utf8',
+        flag:'r'
+    });
+    return JSON.parse(accountJSON);
 }
