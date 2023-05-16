@@ -20,6 +20,9 @@ const operation = () => {
         ]
     }]).then((answer) => {
         const action = answer['action'];
+        if(action === 'Criar Conta' ){
+            createAccount();
+        }
         console.log(action);
 
     }).catch((err) => console.log(err));
@@ -27,3 +30,21 @@ const operation = () => {
 
 
 operation();
+
+// create an account
+const createAccount = () => {
+  console.log(chalk.bgGreen.black("Parabéns por utilizar nosso banco!"));
+  console.log(chalk.bgGreen.black("Defina as opções da sua conta a seguir"));
+  buildAccount();
+};
+
+const buildAccount = () => {
+    inquirer.prompt([{
+        name:"accountName",
+        message:"Digite um nome para a sua conta:"
+    }]).then(
+        (answer) =>{
+            console.log(answer);
+        }
+    ).catch((err) => console.log(err));
+}
