@@ -22,6 +22,8 @@ const operation = () => {
         const action = answer['action'];
         if(action === 'Criar Conta' ){
             createAccount();
+        } else if(action === 'Sair' ){
+            endToProgram();
         }
         console.log(action);
 
@@ -31,6 +33,10 @@ const operation = () => {
 
 operation();
 
+const endToProgram = () =>{
+    console.log(chalk.bgBlue.black("Obrigado por utilizar o Accounts!"));
+    process.exit();
+}
 // create an account
 const createAccount = () => {
   console.log(chalk.bgGreen.black("Parabéns por utilizar nosso banco!"));
