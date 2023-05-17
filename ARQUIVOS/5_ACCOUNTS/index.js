@@ -29,6 +29,9 @@ const operation = () => {
         else if(action === 'Depositar' ){
             deposit();
         }
+        else if(action === 'Sacar' ){
+            withDraw();
+        }
         else if(action === 'Sair' ){
             endToProgram();
         }
@@ -134,7 +137,49 @@ const getAccountBalance = () => {
          return getAccountBalance();
         } 
         const accountData = getAccount(`accounts/${accountName}.json`);
-        console.log(chalk.green(`Seu saldo atual é de R$ ${accountData.balance}`));
+        if(accountData.balance >= 0.00){
+          console.log(chalk.green(`Seu saldo atual é de R$ ${accountData.balance}`));
+        } else {
+            console.log(chalk.red(`Seu saldo atual é de R$ ${accountData.balance}`));
+        }
         return operation();
     }).catch((err) => console.log(err));
 };
+
+const withDraw = (accountName,amount) => {
+    inquirer.prompt([{
+        name:"accountName",
+        message:"Qual o nome da sua conta?"
+    }]).then((answer)=>{
+        const accountName = answer['accountName'];
+        if(!verifyAccount(`accounts/${accountName}.json`)){
+         return withDraw();
+        } 
+        inquirer.prompt([{
+            name:"amount",
+            message:"Quanto você deseja sacar?"
+        }]).then((answer)=>{
+            const amount = answer['amount'];
+            getAmount(`accounts/${accountName}.json`,amount);
+            operation();
+        }).catch((err) => console.log(err));
+
+    }).catch((err) => console.log(err));
+};
+
+const getAmount = (accountName,amount) => {
+    const accountData = getAccount(accountName);
+    if(!amount){
+        console.log(chalk.bgRed.black("Erro ao informar o valor, tente mais tarde!"));
+        return deposit();
+    }
+    accountData.balance = parseFloat(accountData.balance) - parseFloat(amount);
+    fs.writeFileSync(accountName,JSON.stringify(accountData),(err) => {
+        console.log(err);
+    });
+    if(accountData.balance >= 0.00){
+      console.log(chalk.green(`Seu saldo é R$ ${accountData.balance} !`));
+    } else {
+        console.log(chalk.red(`Seu saldo é R$ ${accountData.balance} !`)); 
+    }
+}
