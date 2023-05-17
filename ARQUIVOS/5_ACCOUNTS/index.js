@@ -160,14 +160,14 @@ const withDraw = (accountName,amount) => {
             message:"Quanto você deseja sacar?"
         }]).then((answer)=>{
             const amount = answer['amount'];
-            getAmount(`accounts/${accountName}.json`,amount);
+            removeAmount(`accounts/${accountName}.json`,amount);
             operation();
         }).catch((err) => console.log(err));
 
     }).catch((err) => console.log(err));
 };
 
-const getAmount = (accountName,amount) => {
+const removeAmount = (accountName,amount) => {
     const accountData = getAccount(accountName);
     if(!amount){
         console.log(chalk.bgRed.black("Erro ao informar o valor, tente mais tarde!"));
