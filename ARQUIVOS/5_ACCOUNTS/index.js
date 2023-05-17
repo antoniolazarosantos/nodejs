@@ -22,9 +22,15 @@ const operation = () => {
         const action = answer['action'];
         if(action === 'Criar Conta' ){
             createAccount();
-
-        } else if(action === 'Depositar' ){
+        } 
+        else if(action === 'Consultar Saldo' ){
+            getAccountBalance();
+        }
+        else if(action === 'Depositar' ){
             deposit();
+        }
+        else if(action === 'Sacar' ){
+            withDraw();
         }
         else if(action === 'Sair' ){
             endToProgram();
@@ -120,4 +126,60 @@ const getAccount = (accountName) => {
         flag:'r'
     });
     return JSON.parse(accountJSON);
+}
+const getAccountBalance = () => {
+    inquirer.prompt([{
+        name:"accountName",
+        message:"Qual o nome da sua conta?"
+    }]).then((answer)=>{
+        const accountName = answer['accountName'];
+        if(!verifyAccount(`accounts/${accountName}.json`)){
+         return getAccountBalance();
+        } 
+        const accountData = getAccount(`accounts/${accountName}.json`);
+        if(accountData.balance >= 0.00){
+          console.log(chalk.green(`Seu saldo atual é de R$ ${accountData.balance}`));
+        } else {
+            console.log(chalk.red(`Seu saldo atual é de R$ ${accountData.balance}`));
+        }
+        return operation();
+    }).catch((err) => console.log(err));
+};
+
+const withDraw = (accountName,amount) => {
+    inquirer.prompt([{
+        name:"accountName",
+        message:"Qual o nome da sua conta?"
+    }]).then((answer)=>{
+        const accountName = answer['accountName'];
+        if(!verifyAccount(`accounts/${accountName}.json`)){
+         return withDraw();
+        } 
+        inquirer.prompt([{
+            name:"amount",
+            message:"Quanto você deseja sacar?"
+        }]).then((answer)=>{
+            const amount = answer['amount'];
+            removeAmount(`accounts/${accountName}.json`,amount);
+            operation();
+        }).catch((err) => console.log(err));
+
+    }).catch((err) => console.log(err));
+};
+
+const removeAmount = (accountName,amount) => {
+    const accountData = getAccount(accountName);
+    if(!amount){
+        console.log(chalk.bgRed.black("Erro ao informar o valor, tente mais tarde!"));
+        return deposit();
+    }
+    accountData.balance = parseFloat(accountData.balance) - parseFloat(amount);
+    fs.writeFileSync(accountName,JSON.stringify(accountData),(err) => {
+        console.log(err);
+    });
+    if(accountData.balance >= 0.00){
+      console.log(chalk.green(`Seu saldo é R$ ${accountData.balance} !`));
+    } else {
+        console.log(chalk.red(`Seu saldo é R$ ${accountData.balance} !`)); 
+    }
 }
