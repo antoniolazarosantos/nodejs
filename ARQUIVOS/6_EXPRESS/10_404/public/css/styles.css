@@ -1,0 +1,12 @@
+body {
+    background-color: #dfdfdf;
+    text-align: center;
+    padding: 2em;
+}
+
+strong {
+    background-color: #dfdfdf;
+    text-align: center;
+    color: red;
+    font-size: x-large;
+}
