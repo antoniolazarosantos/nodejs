@@ -9,7 +9,7 @@ app.set('view engine','handlebars');
 
 // rota principal
 app.get('/',(req,res) => {
-    res.render('home',{layout:false});
+    res.render('home');
 });
 
 app.listen(3000,()=>{
