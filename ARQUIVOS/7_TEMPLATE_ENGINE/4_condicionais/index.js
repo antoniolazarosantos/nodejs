@@ -20,7 +20,7 @@ app.get('/',(req,res) => {
 
     const mensagem = "Seja bem vindo.";
 
-    const auth = true;
+    const auth = false;
 
 
     res.render('home',{user:user, mensagem, auth});
