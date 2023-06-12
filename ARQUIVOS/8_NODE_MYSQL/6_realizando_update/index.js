@@ -32,12 +32,12 @@ app.post('/books/insertbook', function (req, res) {
       console.log(err)
     }
 
-    res.redirect('/')
+    res.redirect('/books')
   })
 })
 
 app.get('/books', function (req, res) {
-  const query = `SELECT * FROM books`
+  const query = `SELECT id,title,pageqty FROM books`
 
   conn.query(query, function (err, data) {
     if (err) {
@@ -49,6 +49,58 @@ app.get('/books', function (req, res) {
     console.log(data)
 
     res.render('books', { books })
+  })
+})
+
+app.get('/books/:id', function (req, res) {
+  const id = req.params.id
+
+  const query = `SELECT id,title,pageqty FROM books WHERE id = ${id}`
+
+  conn.query(query, function (err, data) {
+    if (err) {
+      console.log(err)
+    }
+
+    const book = data[0]
+
+    console.log(data[0])
+
+    res.render('book', { book })
+  })
+})
+
+app.get('/books/edit/:id', function (req, res) {
+  const id = req.params.id
+
+  const query = `SELECT  id,title,pageqty FROM books WHERE id = ${id}`
+
+  conn.query(query, function (err, data) {
+    if (err) {
+      console.log(err)
+    }
+
+    const book = data[0]
+
+    console.log(data[0])
+
+    res.render('editbook', { book })
+  })
+})
+
+app.post('/books/updatebook', function (req, res) {
+  const id = req.body.id
+  const title = req.body.title
+  const pageqty = req.body.pageqty
+
+  const query = `UPDATE books SET title = '${title}', pageqty = ${pageqty} WHERE id = ${id}`
+
+  conn.query(query, function (err) {
+    if (err) {
+      console.log(err)
+    }
+
+    res.redirect(`/books`)
   })
 })
 
