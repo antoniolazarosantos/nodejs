@@ -32,12 +32,12 @@ app.post('/books/insertbook', function (req, res) {
       console.log(err)
     }
 
-    res.redirect('/')
+    res.redirect('/books')
   })
 })
 
 app.get('/books', function (req, res) {
-  const query = `SELECT * FROM books`
+  const query = `SELECT id,title,pageqty FROM books`
 
   conn.query(query, function (err, data) {
     if (err) {
