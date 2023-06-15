@@ -1,4 +1,4 @@
-FROM docker.io/library/node:latest
+FROM node:latest
 
 WORKDIR /app
 
